@@ -8,7 +8,7 @@ GREEN = '\033[32m'
 YELLOW = '\033[33m'
 RESET = '\033[0m'
 
-HOST = '192.168.8.146'  # The server's hostname or IP address
+HOST = 'localhost'  # The server's hostname or IP address
 PORT = 443       # The port used by the server
 BUFFER_SIZE =1024
 
