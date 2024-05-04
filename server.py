@@ -22,7 +22,7 @@ BANNER = '''
       ╚═╝░░░░░░╚════╝░╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░
                         [THE BACKDOOR]
                   This tool made by AGENTHACKERS
-
+'''
 
 
 def send_command(conn, command):
