@@ -18,5 +18,5 @@ python server.py
 ```
 ### Victim
 ```bash
-python3 victim.py
+python3 client.py
 ```
